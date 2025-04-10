@@ -1,0 +1,67 @@
+# =======================
+# Configuration to expose Spring Boot Pod (for User public accessing and another Pods connection)
+# =======================
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-service
+  labels:
+    app: hwwai
+spec:
+  type: NodePort  # Others: ClusterIP (for internal apps), LoadBalancer (for cloud Nodes).
+  selector:
+    app: hwwai
+    tier: spring
+  ports:
+    - protocol: TCP
+      port: 9999  # Accessing Port (typed by User)
+      targetPort: 9999  # Real connecting Port (mapping with the above "port") into application
+      nodePort: 30007 # In range [30000, 32767]
+
+---
+# =======================
+# Configuration for Spring Boot App
+# =======================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring
+  labels:
+    app: hwwai
+spec:
+  # Number of Distributed Traffic across Pods (auto apply LoadBalancing)
+  replicas: 2
+  # Spring-Boot needs 2 Pods because it's main Backend API that handles many requests
+  # if 1 Pods is jammed, the other one still handle requests
+  selector:
+    matchLabels:
+      app: hwwai
+      tier: spring
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: hwwai
+        tier: spring
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: minikube  # Force to run on "minikube" node
+      containers:
+      - image: levandungit03/hwwai-spring:0.0.1
+        name: hwwai-spring
+        env:
+          - name: REDIS_CONNECTION
+            value: "redis-service"  # Connect to Redis Service
+          - name: DBMS_CONNECTION
+            value: "jdbc:mysql://mysql-pv:3306/home_workout_with_ai?createDatabaseIfNotExist=true&autoReconnect=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false"
+          - name: DBMS_USERNAME
+            value: "root"
+          - name: DBMS_PASSWORD
+            value: "sa"
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "1000m"
+        ports:
+          - containerPort: 9999

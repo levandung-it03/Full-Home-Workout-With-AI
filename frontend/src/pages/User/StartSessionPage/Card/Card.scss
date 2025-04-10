@@ -1,0 +1,27 @@
+.card {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #ccc;
+    .card-title {
+        background-color: #e0e7ff;
+        color: #3730a3;
+        font-size: 2.2rem;
+        font-weight: 600;
+        padding: 8px 20px;
+        display: flex;
+        gap: 4px;
+        align-items: center;
+        justify-content: space-between;
+        span {
+            flex: 8;
+        }
+        svg {
+            flex: 1;
+            color: #22c55e;
+        }
+    }
+    .card-body {
+        padding: 20px;
+    }
+}

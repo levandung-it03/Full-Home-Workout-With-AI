@@ -1,0 +1,93 @@
+# =======================
+# Secret Configuration for MySQL Credentials
+# =======================
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-pass
+  labels:
+    app: hwwai
+type: Opaque
+data:
+  sa: c2E=  # Giá trị đã được base64 encode của "sa"
+
+---
+# =======================
+# Configuration for Pod's Volume (another Pods just have to use it, don't have to configure it again)
+# =======================
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+  labels:
+    app: hwwai
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+# =======================
+# Configuration for mysql Service Connection (to the other Pods)
+# =======================
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-pv
+  labels:
+    app: hwwai
+spec:
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+      nodePort: 30006	# [30000,32767]
+  selector:
+    app: hwwai
+    tier: mysql
+
+---
+# =======================
+# Deployment provided info
+# =======================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  labels:
+    app: hwwai
+spec:
+  selector:
+    matchLabels:
+      app: hwwai
+      tier: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: hwwai
+        tier: mysql
+    spec:
+      containers:
+      - image: mysql:8.0-debian
+        name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-pass
+              key: sa
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
