@@ -1,6 +1,0 @@
-[submodule "backend"]
-	path = backend
-	url = https://github.com/levandung-it03/Home-Workout-With-AI.git
-[submodule "fastapi"]
-	path = fastapi
-	url = https://github.com/levandung-it03/Home-Workout-With-AI-Machines.git
