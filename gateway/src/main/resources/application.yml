@@ -1,0 +1,38 @@
+server:
+  port: 9090
+
+spring:
+  main:
+    web-application-type: reactive
+  application:
+    name: gateway
+
+  data:
+    redis:
+      url: ${REDIS_SERVICE:redis://localhost:6379}
+      timeout: 60000
+
+  cloud:
+    gateway:
+      default-filters:
+        - name: RequestRateLimiter
+          args:
+            redis-rate-limiter.replenishRate: 10
+            redis-rate-limiter.burstCapacity: 20
+            key-resolver: "#{@ipKeyResolver}"
+
+      routes:
+        - id: fastapi_service_private
+          uri: ${FASTAPI_SERVICE:http://localhost:8000}
+          predicates:
+            - Path=/api/private/**
+
+        - id: spring_service_public
+          uri: ${SPRING_SERVICE:http://localhost:9999}
+          predicates:
+            - Path=/api/public/**
+
+        - id: spring_service_private
+          uri: ${SPRING_SERVICE:http://localhost:9999}
+          predicates:
+            - Path=/api/private/**

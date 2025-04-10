@@ -1,0 +1,62 @@
+# =======================
+# Configuration to expose Gateway Pod (for User public accessing and another Pods connection)
+# =======================
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway-service
+  labels:
+    app: hwwai
+spec:
+  type: NodePort  # Others: ClusterIP (for internal apps), LoadBalancer (for cloud Nodes).
+  selector:
+    app: hwwai
+    tier: gateway
+  ports:
+    - protocol: TCP
+      port: 9090  # Accessing Port (typed by User)
+      targetPort: 9090  # Real connecting Port (mapping with the above "port") into application
+      nodePort: 30010 # In range [30000, 32767]
+
+---
+# =======================
+# Configuration for Gateway App
+# =======================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+  labels:
+    app: hwwai
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hwwai
+      tier: gateway
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: hwwai
+        tier: gateway
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: minikube
+      containers:
+      - image: levandungit03/hwwai-gateway:0.0.2
+        name: hwwai-gateway
+        env:
+          - name: SPRING_SERVICE
+            value: "http://spring-service:9999"
+          - name: FASTAPI_SERVICE
+            value: "http://fastapi-service:8000"
+          - name: REDIS_SERVICE
+            value: "redis://redis-service:6379"
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "1000m"
+        ports:
+          - containerPort: 9090
