@@ -1,0 +1,3 @@
+[submodule "mobile"]
+	path = mobile
+	url = https://github.com/levandung-it03/Home-Workout-With-AI-Mobile.git
