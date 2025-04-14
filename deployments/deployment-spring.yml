@@ -52,7 +52,7 @@ spec:
         name: hwwai-spring
         env:
           - name: REDIS_CONNECTION
-            value: "redis-service"  # Connect to Redis Service
+            value: "redis-service:6379"  # Connect to Redis Service
           - name: DBMS_CONNECTION
             value: "jdbc:mysql://mysql-pv:3306/home_workout_with_ai?createDatabaseIfNotExist=true&autoReconnect=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false"
           - name: DBMS_USERNAME

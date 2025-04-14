@@ -1,6 +1,10 @@
 server:
   port: 9090
-
+management:
+  endpoints:
+    jmx:
+      exposure:
+        exclude: "*"
 spring:
   main:
     web-application-type: reactive
@@ -21,9 +25,16 @@ spring:
             redis-rate-limiter.burstCapacity: 20
             key-resolver: "#{@ipKeyResolver}"
 
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allow-credentials: false
+            allowed-methods: "*"
+            allowed-headers: "*"
+            allowed-origins: "*"
       routes:
-        - id: fastapi_service_private
-          uri: ${FASTAPI_SERVICE:http://localhost:8000}
+        - id: spring_service_private
+          uri: ${SPRING_SERVICE:http://localhost:9999}
           predicates:
             - Path=/api/private/**
 
@@ -32,7 +43,7 @@ spring:
           predicates:
             - Path=/api/public/**
 
-        - id: spring_service_private
-          uri: ${SPRING_SERVICE:http://localhost:9999}
+        - id: fastapi_service_private
+          uri: ${FASTAPI_SERVICE:http://localhost:8000}
           predicates:
             - Path=/api/private/**
