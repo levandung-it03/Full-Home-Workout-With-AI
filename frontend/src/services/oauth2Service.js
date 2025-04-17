@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie';
 import { springService } from './apiService';
+import { CryptoHelper } from '~/utils/cryptoHelpers';
 
 const API_PUBLIC_PREFIX = process.env.REACT_APP_API_PUBLIC_PREFIX;
 
@@ -7,10 +8,10 @@ export class Oauth2PublicService {
     static async oauth2Login(loginType) {
         try {
             const response = await springService.get(`${API_PUBLIC_PREFIX}/auth/v1/oauth2-authentication-url`, {
-                params: { loginType },
+                params: { loginType, redirectUrl: "" },
             });
-            console.log(response.data)
-            window.location.href = response.data.data;
+            console.log(response.data);
+            return CryptoHelper.decrypt(response.data.data);
         } catch (error) {
             console.error(error);
             throw error.response ? error.response.data : error;

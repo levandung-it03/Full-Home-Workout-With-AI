@@ -1,5 +1,5 @@
 import { Eye, EyeOff } from 'lucide-react';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Form, Input } from '~/components';
 import { useDispatch } from 'react-redux';
@@ -29,6 +29,14 @@ function LoginPage() {
             }
         });
     };
+    
+    const oauth2GGLogin = useCallback((e) => {
+        async function request() {
+            const oauth2Url = await Oauth2PublicService.oauth2Login(DEFAULT_OAUTH2_GG_PASS);
+            window.location.href = oauth2Url;
+        }
+        request();
+    }, []);
 
     return (
         <div className="login-container center">
@@ -77,7 +85,7 @@ function LoginPage() {
                         <div className="divider-line"></div>
                     </div>
                     <div className="login-social">
-                        <button className="google-btn center" onClick={e => Oauth2PublicService.oauth2Login(DEFAULT_OAUTH2_GG_PASS) }>
+                        <button className="google-btn center" onClick={oauth2GGLogin}>
                             <img src="https://img.icons8.com/color/40/google-logo.png" alt="google-logo" />
                             <span>Login with google</span>
                         </button>

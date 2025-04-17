@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie';
 import { springService } from './apiService';
+import { CryptoHelper } from '~/utils/cryptoHelpers';
 
 const API_PRIVATE_AUTH_PREFIX = process.env.REACT_APP_API_PRIVATE_AUTH_PREFIX;
 const API_PUBLIC_PREFIX = process.env.REACT_APP_API_PUBLIC_PREFIX;
@@ -48,7 +49,7 @@ export class AuthPublicService {
         try {
             const response = await springService.post(`${API_PUBLIC_PREFIX}/auth/v1/authenticate`, {
                 email,
-                password,
+                password: CryptoHelper.encrypt(password),
             });
             const { accessToken, refreshToken } = response.data.data;
             Cookies.set('accessToken', accessToken, {
