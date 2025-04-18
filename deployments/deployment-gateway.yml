@@ -45,7 +45,7 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: minikube
       containers:
-      - image: levandungit03/hwwai-gateway:0.0.1
+      - image: levandungit03/hwwai-gateway:0.0.3
         name: hwwai-gateway
         env:
           - name: SPRING_SERVICE

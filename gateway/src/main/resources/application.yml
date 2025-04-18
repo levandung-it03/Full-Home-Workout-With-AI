@@ -1,30 +1,31 @@
 server:
   port: 9090
-management:
-  endpoints:
-    jmx:
-      exposure:
-        exclude: "*"
+
+logging:
+  level:
+    web: debug
+
 spring:
   main:
     web-application-type: reactive
   application:
     name: gateway
-
   data:
     redis:
       url: ${REDIS_SERVICE:redis://localhost:6379}
       timeout: 60000
-
   cloud:
     gateway:
+      enabled: true
+      httpclient:
+        connect-timeout: 10000
+        response-timeout: 30s
       default-filters:
         - name: RequestRateLimiter
           args:
             redis-rate-limiter.replenishRate: 10
             redis-rate-limiter.burstCapacity: 20
             key-resolver: "#{@ipKeyResolver}"
-
       globalcors:
         cors-configurations:
           '[/**]':
@@ -37,12 +38,10 @@ spring:
           uri: ${SPRING_SERVICE:http://localhost:9999}
           predicates:
             - Path=/api/private/**
-
         - id: spring_service_public
           uri: ${SPRING_SERVICE:http://localhost:9999}
           predicates:
             - Path=/api/public/**
-
         - id: fastapi_service_private
           uri: ${FASTAPI_SERVICE:http://localhost:8000}
           predicates:

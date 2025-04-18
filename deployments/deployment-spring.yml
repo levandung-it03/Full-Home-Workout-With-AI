@@ -30,7 +30,7 @@ metadata:
     app: hwwai
 spec:
   # Number of Distributed Traffic across Pods (auto apply LoadBalancing)
-  replicas: 2
+  replicas: 1
   # Spring-Boot needs 2 Pods because it's main Backend API that handles many requests
   # if 1 Pods is jammed, the other one still handle requests
   selector:
@@ -48,7 +48,7 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: minikube  # Force to run on "minikube" node
       containers:
-      - image: levandungit03/hwwai-spring:0.0.2
+      - image: levandungit03/hwwai-spring:0.0.3
         name: hwwai-spring
         env:
           - name: REDIS_CONNECTION
