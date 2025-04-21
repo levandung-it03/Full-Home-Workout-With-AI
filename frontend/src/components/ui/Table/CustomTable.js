@@ -53,7 +53,7 @@ export function Table({ title, tableState, pageState, tableComponents, addingFor
     console.log("table")
     const dispatch = useDispatch();
     const { data, selectedRows } = useMemo(() => tableState, [tableState]);
-    const { primaryKey } = useMemo(() => tableState, []);
+    const { primaryKey } = useMemo(() => tableState, [tableState]);
     const [updatingRowId, setUpdatingRowId] = useState(null);
     const [filterData, setFilterData] = useState(null);
     const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -70,10 +70,10 @@ export function Table({ title, tableState, pageState, tableComponents, addingFor
     const handleSort = useCallback((data) => setSortData(data), [])
     const handleSelectAll = useCallback((e) => {
         dispatch(tableComponents.reducers.selectingRows.selectAllRows({ page: pageState }));
-    }, [dispatch, pageState]);
+    }, [dispatch, pageState, tableComponents.reducers.selectingRows]);
     const handleSelectingRow = useCallback((e, rowData) => {
         dispatch(tableComponents.reducers.selectingRows.toggleSelectRow({ page: pageState, rowData }));
-    }, [dispatch, updatingRowId, pageState, tableState]);
+    }, [dispatch, updatingRowId, pageState, tableState, tableComponents.reducers.selectingRows]);
 
     const handleContextMenu = useCallback((e, rowData) => {
         e.preventDefault();
@@ -89,7 +89,7 @@ export function Table({ title, tableState, pageState, tableComponents, addingFor
             y: e.pageY,
             menuItems: contextMenuComponents.menuBuilders.map(menuContextBuilder => menuContextBuilder(rowData))
         });
-    }, []);
+    }, [contextMenuComponents, primaryKey, tableModes.canUpdatingRow]);
 
     const handleSubmitAddingForm = useCallback(formData => {
         const isPreventDefault = { status: false };
@@ -102,7 +102,7 @@ export function Table({ title, tableState, pageState, tableComponents, addingFor
         }
         !isPreventDefault.status && setIsAddingRow(false);
         dispatch(addToast("Adding successfully!", "success"));
-    }, []);
+    }, [addingFormComponents, dispatch]);
 
     useEffect(() => {
         function getData() {
@@ -126,7 +126,10 @@ export function Table({ title, tableState, pageState, tableComponents, addingFor
         };
         if (tableComponents.GET_replacedAction) getData();
         else fetchData();
-    }, [dispatch, sortData, filterData, pageState]);
+    }, [dispatch, sortData, filterData, pageState,
+        tableComponents.reduxInfo.GET_replacedAction,
+        tableComponents.GET_replacedAction,
+        tableComponents.reducers]);
 
     useEffect(() => {
         if (tableModes.hasAddingForm && isAddingRow) {
@@ -141,7 +144,7 @@ export function Table({ title, tableState, pageState, tableComponents, addingFor
                 window.removeEventListener('keydown', handleKeyDown);
             };
         }
-    }, [isAddingRow]);
+    }, [isAddingRow, tableModes.hasAddingForm]);
     
     return (
         <>

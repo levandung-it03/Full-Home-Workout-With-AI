@@ -36,7 +36,7 @@ function UserSidebar({ children }) {
         title: 'User Profile',
         className: 'user-profile',
         body: <UserProfileDialog userProfile={{ ...userProfile, email: jwtClaims.sub }} />,
-    }), [userProfile])
+    }), [userProfile, jwtClaims ])
 
     useEffect(() => {
         const fetchData = async () => {

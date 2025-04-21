@@ -1,4 +1,3 @@
-import { ArrowLeft } from 'lucide-react';
 import './OtpForm.scss';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';

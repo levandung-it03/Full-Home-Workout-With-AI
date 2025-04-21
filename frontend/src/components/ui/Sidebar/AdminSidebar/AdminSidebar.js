@@ -1,5 +1,5 @@
 import { ChevronFirst, ChevronLast, LogOut } from 'lucide-react';
-import { useState, Children, cloneElement, useCallback } from 'react';
+import { useState, Children, cloneElement } from 'react';
 import { AuthPrivateThunk } from '~/redux/thunks/authThunk';
 import { addToast } from '~/redux/slices/toastSlice';
 import { useDispatch } from 'react-redux';

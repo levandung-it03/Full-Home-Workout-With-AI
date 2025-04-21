@@ -6,8 +6,11 @@ import { EnumUserService } from "~/services/enumService";
 import './Oauth2RedirectPage.scss';
 import { checkIsBlank } from "~/utils/formatters";
 import { AuthPublicThunk } from "~/redux/thunks/authThunk";
+import { CryptoHelper } from "~/utils/cryptoHelpers";
+import Cookies from 'js-cookie';
 
 const DEFAULT_OAUTH2_GG_PASS = process.env.REACT_APP_API_DEFAULT_OAUTH2_GG_PASS;
+const REACT_APP_MOBILE = process.env.REACT_APP_MOBILE;
 // const DEFAULT_OAUTH2_FB_PASS = process.env.REACT_APP_API_DEFAULT_OAUTH2_FB_PASS;
 
 function Oauth2RedirectPage() {
@@ -21,8 +24,26 @@ function Oauth2RedirectPage() {
     const onChange = useCallback((e, name) => setFormData(prev => ({ ...prev, [name]: e.target.value })), [setFormData]);
     const noticeAndRedirect = useCallback((response) => {
         if (response.httpStatusCode === 200 || response.status === 200) {
-            navigate('/');
             dispatch(addToast(response.data.message, 'success'));
+
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            const isAndroid = /android/i.test(userAgent);
+
+            if (isAndroid) {
+                try {
+                    const encryptedData = CryptoHelper.encrypt(
+                        Cookies.get('refreshToken') + '_SePaRaToR_' + Cookies.get('accessToken')
+                    );
+                    const redirectUrl = REACT_APP_MOBILE + `?encryptedData=${encodeURIComponent(encryptedData)}`;
+                    window.location.href = redirectUrl; // redirect to Android app
+                    return;
+                } catch (err) {
+                    console.error('Encryption or redirection failed:', err);
+                    dispatch(addToast('Error processing mobile redirect', 'error'));
+                }
+            } else {
+                navigate('/');
+            }
         } else {
             dispatch(addToast(response.data.message, 'error'));
         }

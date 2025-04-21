@@ -108,7 +108,7 @@ function PasswordTab({ userProfile, onClose }) {
         }
         if (!isLastStep) return next();
         onClose()
-    }, [currentStepIndex, isLastStep, next, userProfile.email])
+    }, [currentStepIndex, isLastStep, next, userProfile.email, onClose])
 
     return (
         <Form className="profile-form" onSubmit={handleSubmit}>
