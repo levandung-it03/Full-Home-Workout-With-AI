@@ -151,7 +151,10 @@ function WorkoutScheduleForm({ bodyFat, setGender, setDialogProps }) {
                             <Dumbbell />
                             <span>Aim Ratio</span>
                         </div>
-                        <Select name="aimRatio" options={aimValue === '1' ? weightUpAimRatioOptions : weightDownAimRatioOptions} />
+                        {aimValue === '1'
+                            ? <Select name="aimRatio" options={weightUpAimRatioOptions} defaultValue={weightUpAimRatioOptions[0].value} />
+                            : <Select name="aimRatio" options={weightDownAimRatioOptions} defaultValue={weightDownAimRatioOptions[0].value} />
+                        }
                     </div>}
                 {aimValue === '-1' &&
                     <>

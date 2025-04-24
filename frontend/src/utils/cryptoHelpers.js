@@ -10,6 +10,7 @@ export class CryptoHelper {
             mode: CryptoJS.mode.CBC,
             padding: CryptoJS.pad.Pkcs7,
         });
+        console.log(encrypted.toString());
         return encrypted.toString(); // Base64
     }
 

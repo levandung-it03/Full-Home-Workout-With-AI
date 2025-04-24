@@ -29,10 +29,11 @@ export default function PreviewScheduleDialog({ scheduleId }) {
         async function fetchData() {
             const response = await ScheduleUserService.getPreviewScheduleToPerform(scheduleId);
             const data = { ...response.data };
+            data.subscription.changingCoinsHistories.changingTime[1] = data.subscription.changingCoinsHistories.changingTime[1] - 1;
             data.subscription.changingCoinsHistories.changingTimeAsDateObj = new Date(...data.subscription.changingCoinsHistories.changingTime);
             if (data.subscription.efficientDays !== null) {
                 data.timeReachedEfficientDays = new Date(...data.subscription.changingCoinsHistories.changingTime);
-                data.timeReachedEfficientDays.setDate(data.subscription.efficientDays);
+                data.timeReachedEfficientDays.setDate(data.timeReachedEfficientDays.getDate() + data.subscription.efficientDays);
             }
             setPreviewScheduleData({ ...data });
             setRepRatio(data.subscription.repRatio);
