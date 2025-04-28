@@ -45,7 +45,7 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: minikube  # Force to run on "minikube"
       containers:
-      - image: levandungit03/hwwai-fastapi:0.0.2
+      - image: levandungit03/hwwai-fastapi:0.0.1
         name: fastapi-app
         env:
           - name: SQLALCHEMY_DATABASE_URL

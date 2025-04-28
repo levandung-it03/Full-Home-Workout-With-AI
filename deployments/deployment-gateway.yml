@@ -45,7 +45,7 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: minikube
       containers:
-      - image: levandungit03/hwwai-gateway:0.0.3
+      - image: levandungit03/hwwai-gateway:0.0.1
         name: hwwai-gateway
         env:
           - name: SPRING_SERVICE
@@ -54,6 +54,8 @@ spec:
             value: "http://fastapi-service:8000"
           - name: REDIS_SERVICE
             value: "redis://redis-service:6379"
+          - name: REACTJS_CLIENT
+            value: "http://127.0.0.1:3000,http://localhost:3000,https://home-workout-with-ai-7a8ba.web.app/"
         resources:
           limits:
             memory: "512Mi"

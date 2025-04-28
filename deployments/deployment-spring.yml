@@ -48,7 +48,7 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: minikube  # Force to run on "minikube" node
       containers:
-      - image: levandungit03/hwwai-spring:0.0.5
+      - image: levandungit03/hwwai-spring:0.0.1
         name: hwwai-spring
         env:
           - name: REDIS_CONNECTION

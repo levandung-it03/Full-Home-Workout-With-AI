@@ -21,18 +21,25 @@ spring:
         connect-timeout: 10000
         response-timeout: 30s
       default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
         - name: RequestRateLimiter
           args:
             redis-rate-limiter.replenishRate: 10
             redis-rate-limiter.burstCapacity: 20
             key-resolver: "#{@ipKeyResolver}"
       globalcors:
+        add-to-simple-url-handler-mapping: false
         cors-configurations:
           '[/**]':
-            allow-credentials: false
-            allowed-methods: "*"
+            allowed-origins:
+              - ${REACTJS_CLIENT:http://127.0.0.1:3000,http://localhost:3000}
+            allowed-methods:
+              - GET
+              - POST
+              - DELETE
+              - PUT
+              - OPTIONS
             allowed-headers: "*"
-            allowed-origins: "*"
       routes:
         - id: spring_service_private
           uri: ${SPRING_SERVICE:http://localhost:9999}
@@ -42,7 +49,11 @@ spring:
           uri: ${SPRING_SERVICE:http://localhost:9999}
           predicates:
             - Path=/api/public/**
+        - id: spring_service_test
+          uri: ${SPRING_SERVICE:http://localhost:9999}
+          predicates:
+            - Path=/api/test/**
         - id: fastapi_service_private
           uri: ${FASTAPI_SERVICE:http://localhost:8000}
           predicates:
-            - Path=/api/private/**
+            - Path=/fastapi/private/**
