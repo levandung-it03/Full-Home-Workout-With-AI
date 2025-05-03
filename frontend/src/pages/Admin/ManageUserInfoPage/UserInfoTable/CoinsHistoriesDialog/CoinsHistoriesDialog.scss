@@ -1,0 +1,40 @@
+div.coins-histories-dialog {
+    font-size: 13px;
+    height: 100vh;
+    div.dialog-container {
+        max-width: 80vw;
+        min-width: 80vw;
+        height: 90vh;
+        
+        .dialog-body .table-wrapper {
+            height: 75vh;
+        }
+    }
+    
+    .table-header,
+    .table-body {
+        .table-row {
+            .table-cell {
+                min-height: 30px;
+                padding: 0 10px;
+                &:nth-of-type(1),
+                &:nth-of-type(2),
+                &:nth-of-type(3),
+                &:nth-of-type(4) {
+                    width: 20%;
+                }
+                &:nth-of-type(5) {
+                    width: 20%;
+                    span {
+                        font-size: 10px;
+                        background-color: var(--coins-tag-color);
+                        color: var(--coins-tag-border-color);
+                        border: 1px solid var(--coins-tag-border-color);
+                        border-radius: 12px;
+                        padding: 0 4px;
+                    }
+                }
+            }
+        }
+    }
+}
