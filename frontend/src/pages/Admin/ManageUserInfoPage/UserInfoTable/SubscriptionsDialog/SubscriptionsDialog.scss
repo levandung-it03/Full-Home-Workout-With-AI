@@ -1,14 +1,13 @@
 .subscriptions-dialog {
     font-size: 13px;
-    .dialog {
-        height: 100vh;
-    }
-    .dialog .dialog-container {
+    height: 100vh;
+    .dialog-container {
         max-width: 80vw;
+        min-width: 80vw;
         height: 90vh;
-    }
-    .dialog .dialog-container .dialog-body .table-wrapper {
-        height: 75vh;
+        .dialog-body .table-wrapper {
+            height: 75vh;
+        }
     }
     .table-header,
     .table-body {

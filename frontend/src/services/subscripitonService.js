@@ -17,6 +17,20 @@ export class SubscriptionAdminService {
             throw error.response ? error.response.data : error;
         }
     };
+    static async getAllCoinsHistoriesByUserInfo(page, filterFields, sortedField, sortedMode, id) {
+        try {
+            console.log((page, filterFields, sortedField, sortedMode, id));
+            const response = await springService.get(`${API_ADMIN_PREFIX}/v1/get-changing-coins-histories-of-user`, {
+                params: { page, filterFields, sortedField, sortedMode, id },
+                paramsSerializer: AxiosHelpers.paramsSerializerForGet,
+            });
+            return response.data;
+        } catch (error) {
+            console.error(error);
+            throw error.response ? error.response.data : error;
+        }
+    };
+    
 }
 
 export class SubscriptionUserService {

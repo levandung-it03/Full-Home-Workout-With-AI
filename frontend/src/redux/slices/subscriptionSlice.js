@@ -23,7 +23,7 @@ const subscriptionSlice = createSlice({
                 state.data = action.payload.data.data.map(objData => ({
                     ...objData,
                     completedTime: formatResponseLocalDateTime(objData.completedTime),
-                    subscribedTime: formatResponseLocalDateTime(objData.changingCoinsHistories.changingTime),
+                    subscribedTime: formatResponseLocalDateTime(objData.subscribedTime),
                 }));
                 state.totalPages = action.payload.data.totalPages;
                 state.message = action.payload.message;

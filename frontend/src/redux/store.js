@@ -9,6 +9,7 @@ import enumSlice from './slices/enumSlice';
 import subscriptionSlice from './slices/subscriptionSlice';
 import slidesSlice from './slices/slidesSlice';
 import datalinesSlice from './slices/datalinesSlice';
+import changingCoinsSlice from './slices/changingCoinsSlice';
 
 
 const store = configureStore({
@@ -21,6 +22,7 @@ const store = configureStore({
         userInfo: userInfoSlice,
         enum: enumSlice,
         subscription: subscriptionSlice,
+        changingCoins: changingCoinsSlice,
         slides: slidesSlice,
         datalines: datalinesSlice,
     },

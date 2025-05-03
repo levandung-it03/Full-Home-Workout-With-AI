@@ -121,6 +121,7 @@ export function Table({ title, tableState, pageState, tableComponents, addingFor
                 };
                 await dispatch(tableComponents.reduxInfo.GET_thunk.thunk(objToGetData)).unwrap();
             } catch (error) {
+                console.log(error);
                 dispatch(tableComponents.reducers.globalToastEngine(error, 'error'));
             }
         };

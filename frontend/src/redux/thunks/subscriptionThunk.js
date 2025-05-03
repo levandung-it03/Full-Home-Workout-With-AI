@@ -13,6 +13,16 @@ export class SubscriptionAdminThunk {
             }
         },
     )
+    static getAllCoinsHistoriesByUserInfoThunk = createAsyncThunk('subscription/admin/getAllCoinsHistoriesByUserInfoThunk',
+        async ({ page = 1, filterFields, sortedField, sortedMode, id }, { rejectWithValue }) => {
+            try {
+                const response = await SubscriptionAdminService.getAllCoinsHistoriesByUserInfo(page, filterFields, sortedField, sortedMode, id);
+                return response;
+            } catch (error) {
+                return rejectWithValue(error);
+            }
+        },
+    )
 }
 
 export class SubscriptionUserThunk {

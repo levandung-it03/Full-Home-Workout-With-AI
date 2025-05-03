@@ -9,6 +9,7 @@ import Pagination from '~/components/ui/Table/Pagination/Pagination';
 import './UserInfoTable.scss';
 import { FormatterDict, Table } from '~/components/ui/Table/CustomTable';
 import ContextMenu from '~/components/ui/Table/ContextMenu/ContextMenu';
+import CoinsHistoriesDialog from './CoinsHistoriesDialog/CoinsHistoriesDialog';
 
 export default function UserInfoTable() {
     const dispatch = useDispatch()
@@ -95,6 +96,17 @@ export default function UserInfoTable() {
                     title: '',
                     className: 'subscriptions-dialog',
                     body: <SubscriptionsDialog userInfoId={rowData["userInfoId"]} />,
+                }),
+        }),
+        rowData => ({
+            text: 'Show Coins Histories',
+            icon: <Book />,
+            action: () =>
+                setDialogProps({
+                    isOpen: true,
+                    title: '',
+                    className: 'coins-histories-dialog',
+                    body: <CoinsHistoriesDialog userInfoId={rowData["userInfoId"]} />,
                 }),
         }),
     ]), []);
